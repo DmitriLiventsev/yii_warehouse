@@ -82,17 +82,6 @@ class ProductController extends Controller
         }
     }
 
-    public function actionUpload()
-    {
-        $model = new Product();
-
-        if (Yii::$app->request->isPost) {
-
-        }
-
-        return $this->render('upload', ['model' => $model]);
-    }
-
     /**
      * Updates an existing Product model.
      * If update is successful, the browser will be redirected to the 'view' page.
@@ -102,12 +91,23 @@ class ProductController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
+        $oldPicture = $model->picture;
 
         if ($model->load(Yii::$app->request->post())) {
             $model->picture = UploadedFile::getInstance($model, 'picture');
-
-            if ($model->picture && $model->validate() && $model->save()) {
+            if ($model->picture) {
+                $model->scenario = 'update-photo-upload';
                 $model->picture->saveAs('Uploads' . DIRECTORY_SEPARATOR  . $model->picture->baseName . '.' . $model->picture->extension);
+            } else {
+                $model->picture = $oldPicture;
+            }
+
+            if ($model->validate() && $model->save()) {
+                //Workaround. saveAs should be called only after $model->validate() otherwise tmp file will be moved
+                if ($model->picture != $oldPicture) {
+                    $model->picture->saveAs('Uploads' . DIRECTORY_SEPARATOR  . $model->picture->baseName . '.' . $model->picture->extension);
+                }
+
                 return $this->redirect(['view', 'id' => $model->id]);
             }
         } else {
