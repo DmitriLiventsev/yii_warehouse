@@ -67,4 +67,25 @@ class UserIdentity extends User implements \yii\web\IdentityInterface
     {
         return Yii::$app->getSecurity()->validatePassword($password, $this->password);
     }
+
+    /**
+     * @param $password
+     * @throws \yii\base\Exception
+     */
+    public function setPassword($password)
+    {
+        $this->password = Yii::$app->getSecurity()->generatePasswordHash($password);
+    }
+
+    /**
+     * @throws \yii\base\Exception
+     *
+     * @return true
+     */
+    public function convertPasswordToHash()
+    {
+        $this->setPassword($this->password);
+
+        return true;
+    }
 }

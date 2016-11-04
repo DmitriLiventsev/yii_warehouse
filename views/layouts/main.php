@@ -42,7 +42,7 @@ AppAsset::register($this);
             [
                 ['label' => 'Products', 'url' => ['/product']],
                 ['label' => 'Categories', 'url' => ['/category']],
-                ['label' => 'Add user', 'url' => ['/user/add']],
+                ['label' => 'User', 'url' => ['/user']],
                 '<li>'
                 . Html::beginForm(['/site/logout'], 'post')
                 . Html::submitButton(
