@@ -34,13 +34,23 @@ class Product extends \yii\db\ActiveRecord
         return [
             [['category_ids'], 'each', 'rule' => ['integer']],
             [['price'], 'integer'],
-            [['name'], 'string', 'max' => 128],
+            [['price'], 'integer', 'min' => 1],
+            [['price'], 'required'],
+            [['name'], 'string', 'max' => 128, 'min' => 3],
+            [['name'], 'string', 'min' => 3],
+            [['name'], 'required'],
             [['description'], 'string', 'max' => 256],
             [['picture'], 'file',
                 'extensions' => 'png, jpg, jpeg, gif',
                 'mimeTypes' => 'image/jpeg, image/png',
                 'skipOnEmpty' => true,
                 'on' => 'update-photo-upload'
+            ],
+            [['picture'], 'file',
+                'extensions' => 'png, jpg, jpeg, gif',
+                'mimeTypes' => 'image/jpeg, image/png',
+                'skipOnEmpty' => false,
+                'on' => 'create-photo-upload'
             ]
         ];
     }

@@ -43,6 +43,10 @@ $config = [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
+                ['pattern' => 'product/create', 'route'=>'product/create', 'verb' => 'GET'],
+                ['pattern' => 'product/create', 'route'=>'product/add', 'verb' => 'POST'],
+                ['pattern' => 'product/update', 'route'=>'product/update', 'verb' => 'GET'],
+                ['pattern' => 'product/update', 'route'=>'product/edit', 'verb' => 'POST'], #With PUT routing is not working, and always use GET rule %(
             ],
         ],
     ],

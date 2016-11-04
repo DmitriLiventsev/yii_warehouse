@@ -4,6 +4,7 @@ namespace app\models;
 
 use Yii;
 use yii\helpers\ArrayHelper;
+use yii\rest\ActiveController;
 
 /**
  * This is the model class for table "category".

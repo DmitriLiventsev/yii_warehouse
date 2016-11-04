@@ -3,10 +3,12 @@
 namespace app\controllers;
 
 use app\models\Category;
+use Exception;
 use Yii;
 use app\models\Product;
 use app\models\ProductSearch;
 use yii\filters\AccessControl;
+use yii\helpers\Url;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -72,37 +74,98 @@ class ProductController extends Controller
     }
 
     /**
-     * Creates a new Product model.
-     * If creation is successful, the browser will be redirected to the 'view' page.
+     * Get form to create a new customer
+     *
+     * @Method GET
+     *
      * @return mixed
      */
     public function actionCreate()
     {
         $model = new Product();
 
+        return $this->render('create', [
+            'model' => $model,
+            'categories' => Category::listAll(),
+        ]);
+    }
+
+    /**
+     * Creates a new Product model.
+     * If creation is successful, the browser will be redirected to the 'view' page.
+     *
+     * @Method POST
+     *
+     * @throws Exception
+     * @return \yii\web\Response
+     */
+    public function actionAdd()
+    {
+        $model = new Product();
+        $returnData = [
+            'errors' => [],
+            'item_location' => '',
+            'success_message' => 'Product was successful created!'
+        ];
+
         if ($model->load(Yii::$app->request->post())) {
+            $model->scenario = 'create-photo-upload';
             $model->picture = UploadedFile::getInstance($model, 'picture');
 
-            if ($model->picture && $model->validate() && $model->save()) {
+            if ($model->validate() && $model->save()) {
                 $model->picture->saveAs('Uploads' . DIRECTORY_SEPARATOR  . $model->picture->baseName . '.' . $model->picture->extension);
-                return $this->redirect(['view', 'id' => $model->id]);
+
+                $returnData['item_location'] = Url::to(['view', 'id' => $model->id]);
+            }  else {
+                $returnData['errors'] = $model->getErrors();
             }
         } else {
-            return $this->render('create', [
-                'model' => $model,
-                'categories' => Category::listAll(),
-            ]);
+            throw new Exception('Product data not found');
         }
+
+        $response = Yii::$app->response;
+        $response->format = \yii\web\Response::FORMAT_JSON;
+        $response->data = $returnData;
+
+        return $response;
+    }
+
+    /**
+     * Get form to update a customer
+     *
+     * @method GET
+     *
+     * @param integer $id
+     * @return mixed
+     */
+    public function actionUpdate($id)
+    {
+        $model = $this->findModel($id);
+
+        return $this->render('update', [
+            'model' => $model,
+            'categories' => Category::listAll(),
+        ]);
     }
 
     /**
      * Updates an existing Product model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
+     *
+     * @method POST
+     *
+     * @throws Exception
      * @return mixed
      */
-    public function actionUpdate($id)
+    public function actionEdit($id)
     {
+        $returnData = [
+            'errors' => [],
+            'item_location' => '',
+            'success_message' => 'Product was successful edited!'
+        ];
+
         $model = $this->findModel($id);
         $oldPicture = $model->picture;
 
@@ -121,14 +184,17 @@ class ProductController extends Controller
                     $model->picture->saveAs('Uploads' . DIRECTORY_SEPARATOR  . $model->picture->baseName . '.' . $model->picture->extension);
                 }
 
-                return $this->redirect(['view', 'id' => $model->id]);
+                $returnData['item_location'] = Url::to(['view', 'id' => $model->id]);
+            } else {
+                $returnData['errors'] = $model->getErrors();
             }
         } else {
-            return $this->render('update', [
-                'model' => $model,
-                'categories' => Category::listAll(),
-            ]);
+            throw new Exception('Product data not found');
         }
+
+        $response = Yii::$app->response;
+        $response->format = \yii\web\Response::FORMAT_JSON;
+        $response->data = $returnData;
     }
 
     /**

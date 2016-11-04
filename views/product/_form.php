@@ -14,7 +14,7 @@ $this->registerJsFile("/assets/js/product.js");
 
 <div class="product-form">
 
-    <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data']]); ?>
+    <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data', 'id' => 'product_form', 'data-method' => $model->isNewRecord ? 'POST' : 'POST']]); ?>
 
     <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
 
