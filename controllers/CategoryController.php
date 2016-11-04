@@ -2,10 +2,12 @@
 
 namespace app\controllers;
 
+use Exception;
 use Yii;
 use app\models\Category;
 use app\models\CategorySearch;
 use yii\filters\AccessControl;
+use yii\helpers\Url;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -70,26 +72,61 @@ class CategoryController extends Controller
     }
 
     /**
-     * Creates a new Category model.
-     * If creation is successful, the browser will be redirected to the 'view' page.
+     * Get category create form
+     *
+     * @method GET
+     *
      * @return mixed
      */
     public function actionCreate()
     {
         $model = new Category();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
-        } else {
-            return $this->render('create', [
-                'model' => $model,
-            ]);
-        }
+        return $this->render('create', [
+            'model' => $model,
+        ]);
     }
 
     /**
-     * Updates an existing Category model.
-     * If update is successful, the browser will be redirected to the 'view' page.
+     * Creates a new Category model.
+     * If creation is successful, the browser will be redirected to the 'view' page.
+     *
+     * @method GET
+     *
+     * @throws Exception
+     * @return mixed
+     */
+    public function actionAdd()
+    {
+        $model = new Category();
+        $returnData = [
+            'errors' => [],
+            'item_location' => '',
+            'success_message' => 'Category was successful created!'
+        ];
+
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            if ($model->validate() && $model->save()) {
+                $returnData['item_location'] = Url::to(['view', 'id' => $model->id]);
+            } else {
+                $returnData['errors'] = $model->getErrors();
+            }
+        } else {
+            throw new Exception('Category data not found');
+        }
+
+        $response = Yii::$app->response;
+        $response->format = \yii\web\Response::FORMAT_JSON;
+        $response->data = $returnData;
+
+        return $response;
+    }
+
+    /**
+     * Get category update form
+     *
+     * @method GET
+     *
      * @param integer $id
      * @return mixed
      */
@@ -97,13 +134,45 @@ class CategoryController extends Controller
     {
         $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        return $this->render('update', [
+            'model' => $model,
+        ]);
+    }
+
+    /**
+     * Updates an existing Category model.
+     * If update is successful, the browser will be redirected to the 'view' page.
+     *
+     * @method POST
+     *
+     * @param integer $id
+     * @throws Exception
+     * @return mixed
+     */
+    public function actionEdit($id)
+    {
+        $model = $this->findModel($id);
+        $returnData = [
+            'errors' => [],
+            'item_location' => '',
+            'success_message' => 'Category was successful edited!'
+        ];
+
+        if ($model->load(Yii::$app->request->post())) {
+            if ($model->validate() && $model->save()) {
+                $returnData['item_location'] = Url::to(['view', 'id' => $model->id]);
+            } else {
+                $returnData['errors'] = $model->getErrors();
+            }
         } else {
-            return $this->render('update', [
-                'model' => $model,
-            ]);
+            throw new Exception('Category data not found');
         }
+
+        $response = Yii::$app->response;
+        $response->format = \yii\web\Response::FORMAT_JSON;
+        $response->data = $returnData;
+
+        return $response;
     }
 
     /**
