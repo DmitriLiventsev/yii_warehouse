@@ -7,7 +7,7 @@ use yii\widgets\ActiveForm;
 /* @var $model app\models\Category */
 /* @var $form yii\widgets\ActiveForm */
 
-$this->registerJsFile("/assets/js/category.js");
+$this->registerJsFile("/js/category.js");
 ?>
 
 <div class="category-form">

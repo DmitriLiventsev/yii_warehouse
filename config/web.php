@@ -52,6 +52,11 @@ $config = [
                 ['pattern' => 'category/create', 'route'=>'category/add', 'verb' => 'POST'],
                 ['pattern' => 'category/update', 'route'=>'category/update', 'verb' => 'GET'],
                 ['pattern' => 'category/update', 'route'=>'category/edit', 'verb' => 'POST'], #With PUT routing is not working, and always use GET rule %(
+
+                ['pattern' => 'user/create', 'route'=>'user/create', 'verb' => 'GET'],
+                ['pattern' => 'user/create', 'route'=>'user/add', 'verb' => 'POST'],
+
+                ['pattern' => '/', 'route' =>'product/index', 'verb' => 'GET'],
             ],
         ],
     ],

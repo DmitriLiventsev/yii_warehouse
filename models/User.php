@@ -30,8 +30,12 @@ class User extends \yii\db\ActiveRecord
     {
         return [
             [['username'], 'string', 'max' => 50],
+            [['username'], 'string', 'min' => 5],
+            [['username'], 'required'],
             [['username'], 'unique'],
+            [['password'], 'string', 'min' => 4],
             [['password'], 'string', 'max' => 64],
+            [['password'], 'required'],
         ];
     }
 

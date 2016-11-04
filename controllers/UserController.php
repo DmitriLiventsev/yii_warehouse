@@ -2,10 +2,12 @@
 
 namespace app\controllers;
 
+use Exception;
 use Yii;
 use app\models\UserIdentity;
 use app\models\UserIdentitySearch;
 use yii\filters\AccessControl;
+use yii\helpers\Url;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -70,22 +72,55 @@ class UserController extends Controller
     }
 
     /**
-     * Creates a new UserIdentity model.
-     * If creation is successful, the browser will be redirected to the 'view' page.
+     * Get form to create new customer
+     *
+     * @method GET
+     *
      * @return mixed
      */
     public function actionCreate()
     {
         $model = new UserIdentity();
 
-        if ($model->load(Yii::$app->request->post()) && $model->validate()
-            && $model->convertPasswordToHash() && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        return $this->render('create', [
+            'model' => $model,
+        ]);
+    }
+
+    /**
+     * Creates a new UserIdentity model.
+     * If creation is successful, the browser will be redirected to the 'view' page.
+     *
+     * @method POST
+     *
+     * @throws Exception
+     * @return mixed
+     */
+    public function actionAdd()
+    {
+        $model = new UserIdentity();
+
+        $returnData = [
+            'errors' => [],
+            'item_location' => '',
+            'success_message' => 'User was successful created!'
+        ];
+
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            if ($model->validate() && $model->save()) {
+                $returnData['item_location'] = Url::to(['view', 'id' => $model->id]);
+            } else {
+                $returnData['errors'] = $model->getErrors();
+            }
         } else {
-            return $this->render('create', [
-                'model' => $model,
-            ]);
+            throw new Exception('User data not found');
         }
+
+        $response = Yii::$app->response;
+        $response->format = \yii\web\Response::FORMAT_JSON;
+        $response->data = $returnData;
+
+        return $response;
     }
 
 

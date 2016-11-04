@@ -8,7 +8,7 @@ use yii\widgets\ActiveForm;
 /* @var $form yii\widgets\ActiveForm */
 /* @var $categories app\models\Category[] */
 
-$this->registerJsFile("/assets/js/product.js");
+$this->registerJsFile("/js/product.js");
 
 ?>
 

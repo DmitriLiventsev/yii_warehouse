@@ -19,7 +19,7 @@ AppAsset::register($this);
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <?= Html::csrfMetaTags() ?>
     <title><?= Html::encode($this->title) ?></title>
-    <?php $this->registerJsFile("/assets/js/sweetalert.min.js"); ?>
+    <?php $this->registerJsFile("/js/sweetalert.min.js"); ?>
     <?php $this->registerCssFile("/css/sweetalert.css"); ?>
     <?php $this->head() ?>
 </head>
