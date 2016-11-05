@@ -26,6 +26,5 @@ phpunit.phar
 # local phpunit config
 /phpunit.xml
 
-web/Uploads/*
 tests/_output/*
 tests/_support/_generated
