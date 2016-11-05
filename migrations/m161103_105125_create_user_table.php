@@ -22,10 +22,10 @@ class m161103_105125_create_user_table extends Migration
             'UNIQUE KEY `username` (`username`)',
         ]);
 
-        $user = new User();
-        $user->username = 'demo';
-        $user->password = Yii::$app->getSecurity()->generatePasswordHash('demo');
-        $user->save();
+        $this->insert('user', [
+            'username' => 'demo',
+            'password' => Yii::$app->getSecurity()->generatePasswordHash('demo')
+        ]);
 
     }
 
