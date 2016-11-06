@@ -8,26 +8,26 @@ Password: demo
 
 ### Installation:
 
-** Clone repozitory to you machine:
+Clone repozitory to you machine:
 ```
 https://github.com/DmitriLiventsev/yii_warehouse.git
 ```
 
-** Go to project:
+Go to project:
 ```
 cd yii_warehouse
 ```
 
-** Install dependencies:
+Install dependencies:
 ```
 composer install
 ```
 
-** Setup DB in the config file : config\db.php
+Setup DB in the config file : config\db.php
 
-** Run migrations:
+Run migrations:
 ```
 yii migrate
 ```
 
-** Setup your web server: all request should b redirected to web\index.php
+Setup your web server: all request should b redirected to web\index.php
