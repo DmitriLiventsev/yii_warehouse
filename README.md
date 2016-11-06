@@ -14,7 +14,7 @@ demo
 
 ### Installation:
 
-Clone repozitory to you machine:
+Clone repository to you machine:
 ```
 https://github.com/DmitriLiventsev/yii_warehouse.git
 ```
